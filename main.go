@@ -13,6 +13,7 @@ import (
 var db *geoip2.Reader;
 
 func main() {
+	const port = "9090"  // XXX: move to env variable
 	var err error
 	db, err = geoip2.Open("GeoLite2-Country.mmdb")
 	if err != nil {
@@ -21,7 +22,7 @@ func main() {
 	defer db.Close()
 	http.HandleFunc("/country", country)  // e.g. /country?ip=81.2.69.142
 	http.HandleFunc("/ping", ping)
-	log.Fatal(http.ListenAndServe(":9090", nil))
+	log.Fatal(http.ListenAndServe(":" + port, nil))
 }
 
 func ping(w http.ResponseWriter, r *http.Request) {

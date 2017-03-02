@@ -15,7 +15,7 @@ go run main.go
 
 ### Test
 ```bash
-curl "localhost:8080/country?ip=<YOUR_IP>"
+curl "localhost:9090/country?ip=<YOUR_IP>"
 ```
 
 ### With Docker

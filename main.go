@@ -2,27 +2,27 @@ package main
 
 import (
 	"io"
+	"log"
 	"net"
 	"net/http"
-	"log"
 
 	"github.com/oschwald/geoip2-golang"
 	"strings"
 )
 
-var db *geoip2.Reader;
+var db *geoip2.Reader
 
 func main() {
-	const port = "9090"  // XXX: move to env variable
+	const port = "9090" // XXX: move to env variable
 	var err error
 	db, err = geoip2.Open("GeoLite2-Country.mmdb")
 	if err != nil {
 		log.Fatal(err)
 	}
 	defer db.Close()
-	http.HandleFunc("/country", country)  // e.g. /country?ip=81.2.69.142
+	http.HandleFunc("/country", country) // e.g. /country?ip=81.2.69.142
 	http.HandleFunc("/ping", ping)
-	log.Fatal(http.ListenAndServe(":" + port, nil))
+	log.Fatal(http.ListenAndServe(":"+port, nil))
 }
 
 func ping(w http.ResponseWriter, r *http.Request) {

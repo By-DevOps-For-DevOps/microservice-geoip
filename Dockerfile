@@ -1,13 +1,16 @@
-FROM golang:1.7.4
-MAINTAINER kamoljan@gmail.com
+FROM golang:1.17-alpine
 
-ADD . /go/src/github.com/microservices-today/microservice-geoip
+WORKDIR /app
 
-RUN go get github.com/microservices-today/microservice-geoip
-RUN go install github.com/microservices-today/microservice-geoip
+COPY go.mod ./
+COPY go.sum ./
 
-COPY GeoLite2-Country.mmdb /go/bin/microservice-geoip
+RUN go mod download
 
-ENTRYPOINT /go/bin/microservice-geoip
+COPY *.go ./
+COPY GeoLite2-Country.mmdb ./
+
+RUN go build -o ./geoip
 
 EXPOSE 9090
+CMD ["/app/geoip"]

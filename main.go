@@ -1,10 +1,12 @@
 package main
 
 import (
+	"fmt"
 	"io"
 	"log"
 	"net"
 	"net/http"
+	"os"
 
 	"github.com/oschwald/geoip2-golang"
 	"strings"
@@ -13,7 +15,6 @@ import (
 var db *geoip2.Reader
 
 func main() {
-	const port = "9090" // XXX: move to env variable
 	var err error
 	db, err = geoip2.Open("GeoLite2-Country.mmdb")
 	if err != nil {
@@ -22,7 +23,18 @@ func main() {
 	defer db.Close()
 	http.HandleFunc("/country", country) // e.g. /country?ip=81.2.69.142
 	http.HandleFunc("/ping", ping)
-	log.Fatal(http.ListenAndServe(":"+port, nil))
+	http.HandleFunc("/health", health)
+	log.Fatal(http.ListenAndServe(fmt.Sprintf(":%s", os.Getenv("PORT")), nil))
+}
+
+func health(w http.ResponseWriter, r *http.Request) {
+	// A very simple health check.
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(http.StatusOK)
+
+	// In the future we could report back on the status of our DB, or our cache
+	// (e.g. Redis) by performing a simple PING, and include them in the response.
+	io.WriteString(w, `Don't worry, I'm healthy!`)
 }
 
 func ping(w http.ResponseWriter, r *http.Request) {

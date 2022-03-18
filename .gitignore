@@ -32,3 +32,6 @@ microservice-geoip
 .idea
 
 main
+
+# Security
+.envrc

@@ -1,0 +1,20 @@
+version: 0.2
+
+phases:
+  install:
+    runtime-versions:
+      docker: 19
+  build:
+    commands:
+      - . ./ecs.sh
+
+  post_build:
+    commands:
+      - . ./ecs/post_build.sh
+
+artifacts:
+  files:
+    - ecs.sh
+    - ecs/*
+    - buildspec.yml
+    - docker.tag

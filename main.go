@@ -22,7 +22,7 @@ func main() {
 	}
 	defer db.Close()
 	http.HandleFunc("/country", country) // e.g. /country?ip=81.2.69.142
-	http.HandleFunc("/ping", ping)
+	http.HandleFunc("/ip", ip)
 	http.HandleFunc("/health", health)
 	log.Fatal(http.ListenAndServe(fmt.Sprintf(":%s", os.Getenv("PORT")), nil))
 }
@@ -37,7 +37,7 @@ func health(w http.ResponseWriter, r *http.Request) {
 	io.WriteString(w, `Don't worry, I'm healthy!`)
 }
 
-func ping(w http.ResponseWriter, r *http.Request) {
+func ip(w http.ResponseWriter, r *http.Request) {
 	if r.Method != "GET" {
 		http.Error(w, "GET only", http.StatusMethodNotAllowed)
 		return

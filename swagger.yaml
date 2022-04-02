@@ -103,6 +103,11 @@ paths:
     get:
       summary: Health Check
       description: Health check.
+      parameters:
+      - name: "X-Forwarded-For"
+        in: "header"
+        required: false
+        type: "string"
       responses:
         '200':
           description: success

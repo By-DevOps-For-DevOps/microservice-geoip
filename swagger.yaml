@@ -123,5 +123,6 @@ paths:
             statusCode: '200'
             responseParameters:
               method.response.header.Access-Control-Allow-Origin: "'https://apidoc.{{DOMAIN_NAME}}'"
-            requestParameters:
-              integration.request.header.X-Forwarded-For: "method.request.header.X-Forwarded-For"
+        requestParameters:
+          integration.request.header.X-Forwarded-For: "method.request.header.X-Forwarded-For"
+        passthroughBehavior: "when_no_match"

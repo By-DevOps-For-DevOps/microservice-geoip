@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"io"
+	"io/ioutil"
 	"log"
 	"net"
 	"net/http"
@@ -23,6 +24,7 @@ func main() {
 	defer db.Close()
 	http.HandleFunc("/country", country) // e.g. /country?ip=81.2.69.142
 	http.HandleFunc("/ip", ip)
+	http.HandleFunc("/outbound", outbound)
 	http.HandleFunc("/health", health)
 	log.Fatal(http.ListenAndServe(fmt.Sprintf(":%s", os.Getenv("PORT")), nil))
 }
@@ -47,6 +49,16 @@ func ip(w http.ResponseWriter, r *http.Request) {
 	for _, ip := range ips {
 		w.Write([]byte(ip + "\n"))
 	}
+}
+
+func outbound(w http.ResponseWriter, r *http.Request) {
+	resp, err := http.Get("https://ifconfig.me")
+	if err != nil {
+		http.Error(w, "Something is wrong with ifconfig.me", http.StatusBadRequest)
+	}
+	defer resp.Body.Close()
+	body, err := ioutil.ReadAll(resp.Body)
+	w.Write(body)
 }
 
 func country(w http.ResponseWriter, r *http.Request) {

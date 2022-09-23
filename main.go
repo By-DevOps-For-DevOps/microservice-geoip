@@ -12,7 +12,7 @@ import (
 
 func main() {
 	var err error
-	db.Reader, err = geoip2.Open("GeoLite2-Country.mmdb")
+	db.Reader, err = geoip2.Open("./db/GeoLite2-Country.mmdb")
 	if err != nil {
 		log.Fatal(err)
 	}

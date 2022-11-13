@@ -8,7 +8,7 @@ COPY go.sum ./
 RUN go mod download
 
 COPY *.go ./
-COPY GeoLite2-Country.mmdb ./
+COPY db/ /db/
 
 RUN go build -o ./geoip
 
